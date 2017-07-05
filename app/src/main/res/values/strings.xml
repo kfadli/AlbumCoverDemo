@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AlbumCoverDemo</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="api">http://api.deezer.com/2.0/user/2529/albums</string>
 </resources>
