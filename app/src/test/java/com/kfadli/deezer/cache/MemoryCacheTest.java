@@ -1,4 +1,4 @@
-package com.kfadli.deezer;
+package com.kfadli.deezer.cache;
 
 import android.graphics.Bitmap;
 
