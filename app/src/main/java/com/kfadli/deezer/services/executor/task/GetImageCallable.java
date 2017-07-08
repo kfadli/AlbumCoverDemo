@@ -8,8 +8,10 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.kfadli.deezer.R;
+import com.kfadli.deezer.exception.DownloadImageException;
 import com.kfadli.deezer.helper.ImageHelper;
 import com.kfadli.deezer.services.cache.CacheManager;
+import com.kfadli.deezer.services.executor.ICallbackResult;
 import com.kfadli.deezer.services.executor.SuperCallable;
 
 import java.io.IOException;
@@ -26,19 +28,20 @@ public class GetImageCallable extends SuperCallable<String, Bitmap> {
 
     private static final String TAG = "GetImageTask";
 
-    private WeakReference<ImageView> mImageView;
+    //
     private CacheManager mCache;
     private int mId;
 
     public GetImageCallable(CacheManager cache, ImageView imageView, String url, int id) {
         super(url);
+
+        this.mDelegate = new BitmapResult(imageView, this);
         this.mCache = cache;
         this.mId = id;
-        this.mImageView = new WeakReference<>(imageView);
     }
 
     @Override
-    public Bitmap execute(String url) {
+    public Bitmap execute(String url) throws Exception{
 
         Log.d(TAG, "[execute] url:" + url);
 
@@ -68,19 +71,12 @@ public class GetImageCallable extends SuperCallable<String, Bitmap> {
     public void postExecute(Bitmap result) {
         Log.d(TAG, "[onPostExecute] id:" + mId);
         if (result != null) {
-            final ImageView imageView = mImageView.get();
-            final Callable bitmapWorkerTask = ImageHelper.getCurrentTask(imageView);
-            if (this == bitmapWorkerTask) {
-                imageView.setImageBitmap(result);
-                ObjectAnimator fade = ObjectAnimator.ofFloat(imageView, "alpha", 0.0f, 1.0f);
-                fade.setDuration(200);
-                fade.start();
-            }
+            mDelegate.success(result);
         }
     }
 
 
-    public Bitmap downloadBitmap(String url) {
+    public Bitmap downloadBitmap(String url) throws DownloadImageException {
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
@@ -90,8 +86,8 @@ public class GetImageCallable extends SuperCallable<String, Bitmap> {
             return BitmapFactory.decodeStream(connection.getInputStream());
         } catch (IOException e) {
             Log.e(TAG, "[downloadBitmap] Failed to download Bitmap, url: " + url, e);
+            throw new DownloadImageException("Failed to download Bitmap, url: " + url, e);
         }
-        return null;
     }
 
     public int getId() {
