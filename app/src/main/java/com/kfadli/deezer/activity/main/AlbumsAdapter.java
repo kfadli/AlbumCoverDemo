@@ -1,6 +1,5 @@
-package com.kfadli.deezer.activity;
+package com.kfadli.deezer.activity.main;
 
-import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,17 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.kfadli.deezer.R;
-import com.kfadli.deezer.helper.ImageHelper;
-import com.kfadli.deezer.services.cache.CacheManager;
-import com.kfadli.deezer.services.executor.FutureTaskPriority;
-import com.kfadli.deezer.services.executor.task.GetImageCallable;
 import com.kfadli.deezer.enums.PriorityEnum;
-import com.kfadli.deezer.services.executor.TaskPoolManager;
+import com.kfadli.deezer.helper.ImageHelper;
 import com.kfadli.deezer.model.Album;
 import com.kfadli.deezer.model.Artist;
+import com.kfadli.deezer.services.cache.CacheManager;
+import com.kfadli.deezer.services.executor.task.GetImageCallable;
 
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 /**
  * Created by Karim Fadli on 02/07/2017.
@@ -77,6 +73,6 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             super(itemView);
             mCover = (ImageView) itemView.findViewById(R.id.imageView);
         }
-
     }
+
 }
