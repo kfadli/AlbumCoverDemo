@@ -6,7 +6,7 @@ package com.kfadli.deezer.exception;
 
 public class DownloadImageException extends Exception {
 
-    public DownloadImageException(String message) {
-        super(message);
+    public DownloadImageException(String message, Exception e) {
+        super(message, e);
     }
 }
